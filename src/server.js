@@ -10,7 +10,7 @@ import {
 
 const server = express();
 
-const port = 3001;
+const port = 3002;
 
 //*************** MIDDLEWARE ***************//
 server.use(cors());

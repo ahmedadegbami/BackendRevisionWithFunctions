@@ -7,7 +7,12 @@ import {
   findproductbyIdandUpdate,
   findproductbyIdandDelete,
 } from "../../lib/db/products.js";
-import { saveNewReview, findReviewById } from "../../lib/db/review.js";
+import {
+  saveNewReview,
+  findReviewById,
+  findReviewByIdAndUpdate,
+  findReviewByIdAndDelete,
+} from "../../lib/db/review.js";
 import {
   checksProductsSchema,
   checksProductsUpdateSchema,
@@ -84,7 +89,7 @@ productsRouter.delete("/:productId", async (req, res, next) => {
 
 productsRouter.post(
   "/:productId/image",
-  multer().single(),
+  multer({ limits: 1 * 1024 * 1024 }).single(),
   async (req, res, next) => {
     try {
     } catch (error) {
@@ -130,6 +135,12 @@ productsRouter.get("/:productId/review/:reviewId", async (req, res, next) => {
 
 productsRouter.put("/:productId/review/:reviewId", async (req, res, next) => {
   try {
+    const updatedReview = await findReviewByIdAndUpdate(
+      req.params.productId,
+      req.params.reviewId,
+      req.body
+    );
+    res.send(updatedReview);
   } catch (error) {
     next(error);
   }
@@ -139,6 +150,11 @@ productsRouter.delete(
   "/:productId/review/:reviewId",
   async (req, res, next) => {
     try {
+      const reviews = await findReviewByIdAndDelete(
+        req.params.productId,
+        req.params.reviewId
+      );
+      res.send(reviews);
     } catch (error) {
       next(error);
     }

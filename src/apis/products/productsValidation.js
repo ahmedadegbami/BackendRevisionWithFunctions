@@ -89,7 +89,7 @@ export const checkValidationResult = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     next(
-      createError(400, `validation errors!`, { errorsList: errors.array() })
+      createError(400, `Validation errors!`, { errorsList: errors.array() })
     );
   } else {
     next();

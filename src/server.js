@@ -5,7 +5,7 @@ import cors from "cors";
 import {
   badRequestErrorHandler,
   notFoundErrorHandler,
-  genericServerErrorHandler,
+  genericErrorHandler,
 } from "./errorHandlers.js";
 
 const server = express();
@@ -23,7 +23,7 @@ server.use("/products", productsRouter);
 
 server.use(badRequestErrorHandler);
 server.use(notFoundErrorHandler);
-server.use(genericServerErrorHandler);
+server.use(genericErrorHandler);
 
 server.listen(port, () => {
   console.table(listEndpoints(server));

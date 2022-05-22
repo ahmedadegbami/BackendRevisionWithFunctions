@@ -54,3 +54,13 @@ export const findproductbyIdandDelete = async (productId) => {
     await writeProducts(remproducts);
   }
 };
+
+// THIS DONE TO CHECK IF A VALUE EXISTS IN THE DATABASE
+export const findProductBySKU = async (sku) => {
+  const products = await getProducts();
+
+  const foundProduct = products.find((product) => product.sku === sku);
+
+  if (foundProduct) return foundProduct;
+  else throw createError(404, `Product with id ${sku} not found!`);
+};

@@ -1,5 +1,6 @@
 import { checkSchema, validationResult } from "express-validator";
 import createError from "http-errors";
+import { findProductBySKU } from "../../lib/db/products.js";
 
 const productsSchema = {
   description: {
@@ -27,6 +28,19 @@ const productsSchema = {
       options: [["electronic", "cloth", "food"]],
       errorMessage:
         "Category must be one of the following: electronic, cloth, food",
+    },
+  },
+  sku: {
+    custom: {
+      options: async (value) => {
+        try {
+          const product = await findProductBySKU(value);
+          if (product) return Promise.reject("SKU already in use");
+          else return product;
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
   },
 };
@@ -72,10 +86,10 @@ export const checksProductsUpdateSchema = checkSchema(productsUpdateSchema);
 
 export const checkValidationResult = (req, res, next) => {
   const errors = validationResult(req);
-  console.log(errors);
+
   if (!errors.isEmpty()) {
     next(
-      createError(400, `validation errors!`, { errorslist: errors.array() })
+      createError(400, `validation errors!`, { errorsList: errors.array() })
     );
   } else {
     next();
